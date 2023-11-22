@@ -1,0 +1,59 @@
+GET http://localhost:5000/users
+
+### 
+POST http://localhost:5000/users 
+Content-Type: application/json
+
+{
+"nama": "Clavino",
+"tgl_lahir": "10-10-2004", 
+"tgl_booking": "01-10-2023", 
+"tgl_berangkat": "02-10-2023", 
+"jml_penumpang": "1", 
+"email": "clavino@gmail.com", 
+"no_telp": "082195808930", 
+"layanan": "First Class",
+"desId": 3
+}
+
+###
+PATCH  http://localhost:5000/users/7
+Content-Type: application/json
+
+{
+"name": "Arvan", "email": "arvamgamteng@gmail.com", "gender": "Male"
+}
+
+###
+DELETE http://localhost:5000/users/8
+
+####################
+
+
+GET http://localhost:5000/destinasi
+
+
+###
+GET http://localhost:5000/destinasi/2
+
+### 
+POST http://localhost:5000/destinasi
+Content-Type: application/json
+
+{
+    "tujuan": "Surabaya",
+    "harga": "Rp.600.000,00"
+}
+
+###
+PATCH http://localhost:5000/destinasi/2
+Content-Type: application/json
+
+{
+    "tujuan": "Bandung",
+    "harga": "Rp.250.000,00"
+}
+
+
+###
+DELETE http://localhost:5000/products/2
