@@ -5,15 +5,14 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-"nama": "Clavino",
-"tgl_lahir": "10-10-2004", 
-"tgl_booking": "01-10-2023", 
-"tgl_berangkat": "02-10-2023", 
-"jml_penumpang": "1", 
-"email": "clavino@gmail.com", 
-"no_telp": "082195808930", 
-"layanan": "First Class",
-"desId": 3
+"nama penyewa": "Clavino",
+"alamat": "Taman Cibodas", 
+"tgl_sewa": "01-10-2023", 
+"durasi": "02-10-2023", 
+"no_telp": 0812, 
+"lokasi_ambil": "clavino@gmail.com", 
+"lokasi_kembali": "082195808930", 
+"mobId": ,
 }
 
 ###
@@ -37,12 +36,13 @@ GET http://localhost:5000/destinasi
 GET http://localhost:5000/destinasi/2
 
 ### 
-POST http://localhost:5000/destinasi
+POST http://localhost:5000/mobil
 Content-Type: application/json
 
 {
-    "tujuan": "Surabaya",
-    "harga": "Rp.600.000,00"
+    "nama": "Toyota Camry",
+    "harga": "Rp.500000",
+    "foto": "mobil.jpg",
 }
 
 ###

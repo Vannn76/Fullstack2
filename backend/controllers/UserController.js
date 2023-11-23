@@ -1,14 +1,14 @@
 import User from "../models/UserModel.js";
-import Destinasi from "../models/DestinasiModel.js";
+import Mobil from "../models/MobilModel.js";
 
 
 export const getUsers = async(req, res) =>{
     try {
         const response = await User.findAll({
-            attributes:['id','nama','tgl_lahir','tgl_booking','tgl_berangkat','jml_penumpang','email','no_telp','layanan'],
+            attributes:['id','nama_penyewa','alamat','tgl_sewa','durasi','no_telp','lokasi_ambil','lokasi_kembali'],
             include:[{
-                model: Destinasi,
-                attributes:['tujuan','harga']
+                model: Mobil,
+                attributes:['nama','harga']
             }]
         });
         
@@ -19,18 +19,17 @@ export const getUsers = async(req, res) =>{
 }
 
 export const createUsers = async(req, res) =>{
-    const {nama,tgl_lahir,tgl_booking,tgl_berangkat,jml_penumpang,email,no_telp,layanan, desId} = req.body;
+    const {nama_penyewa,alamat,tgl_sewa,durasi,no_telp,lokasi_ambil,lokasi_kembali,mobId} = req.body;
     try {
         await User.create({
-            nama: nama,
-            tgl_lahir: tgl_lahir,
-            tgl_booking: tgl_booking,
-            tgl_berangkat: tgl_berangkat,
-            jml_penumpang: jml_penumpang,
-            email: email,
+            nama_penyewa: nama_penyewa,
+            alamat: alamat,
+            tgl_sewa: tgl_sewa,
+            durasi: durasi,
             no_telp: no_telp,
-            layanan: layanan,
-            desId: desId
+            lokasi_ambil: lokasi_ambil,
+            lokasi_kembali: lokasi_kembali,
+            mobId: mobId,
         });
         res.status(201).json({msg: "Selamat Registrasi Berhasil!"});
     } catch (error) {

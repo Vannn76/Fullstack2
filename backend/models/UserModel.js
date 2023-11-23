@@ -1,22 +1,21 @@
 import {Sequelize} from "sequelize";
 import db from "../config/database.js";
-import Destinasi from "./DestinasiModel.js";
+import Mobil from "./MobilModel.js";
 
 const {DataTypes} = Sequelize;
 const User = db.define('user',{
-    nama: DataTypes.STRING,
-    tgl_lahir: DataTypes.STRING,
-    tgl_booking: DataTypes.STRING,
-    tgl_berangkat: DataTypes.STRING,
-    desId: DataTypes.INTEGER,
-    jml_penumpang: DataTypes.INTEGER,
-    email: DataTypes.STRING,
-    no_telp: DataTypes.STRING,
-    layanan: DataTypes.STRING
+    nama_penyewa: DataTypes.STRING,
+    alamat: DataTypes.STRING,
+    tgl_sewa: DataTypes.STRING,
+    durasi: DataTypes.STRING,
+    no_telp: DataTypes.INTEGER,
+    lokasi_ambil: DataTypes.STRING,
+    lokasi_kembali: DataTypes.STRING,
+    mobId: DataTypes.INTEGER,
 },{
     freezeTableName:true
 });
 
-User.belongsTo(Destinasi, {foreignKey: 'desId'});
+User.belongsTo(Mobil, {foreignKey: 'mobId'});
 
 export default User;

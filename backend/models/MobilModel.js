@@ -3,11 +3,12 @@ import db from "../config/database.js";
 
 const {DataTypes} = Sequelize;
 
-const Destinasi = db.define('destinasi',{
-    tujuan: DataTypes.STRING,
-    harga: DataTypes.STRING
+const Mobil = db.define('mobil',{
+    nama: DataTypes.STRING,
+    harga: DataTypes.STRING,
+    foto: DataTypes.STRING,
 },{
     freezeTableName:true
 });
 
-export default Destinasi;
+export default Mobil;
