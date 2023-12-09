@@ -3,7 +3,7 @@ import Mobil from "../models/MobilModel.js";
 export const getMobil = async(req, res) =>{
     try {
         const response = await Mobil.findAll({
-            attributes: ["nama","harga","foto"]
+            attributes: ["id","nama","harga","foto"]
         });
         res.status(200).json(response);
     } catch (error) {
@@ -32,11 +32,16 @@ export const getMobilById = async(req, res) =>{
 }
 
 export const createMobil = async(req, res) =>{
+    const {nama, harga, foto} = req.body;
     try {
-        await Mobil.create(req.body);
+        await Mobil.create({
+            nama: nama,
+            harga: harga,
+            foto: foto,
+        });
         res.status(201).json({msg: "Data Berhasil Ditambahkan"});
     } catch (error) {
-        console.log(error.message);
+        res.status(500).json({msg: error.message})
     }
 }
 
