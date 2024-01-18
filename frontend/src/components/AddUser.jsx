@@ -3,31 +3,33 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
 const AddUser = () => {
-const [nama, setNama] = useState("");
-const [tgl_lahir, setTglLahir] = useState("");
-const [tgl_booking, setTglBooking] = useState("");
-const [tgl_berangkat, setTglBerangkat] = useState("");
-const [jml_penumpang, setJmlPenumpang] = useState("");
+const [nama_penyewa, setNamaPenyewa] = useState("");
+const [alamat, setAlamat] = useState("");
+const [tgl_sewa, setTglSewa] = useState("");
+const [durasi, setDurasi] = useState();
+const [lokasi_ambil, setLokasiAmbil] = useState("");
+const [lokasi_kembali, setLokasiKembali] = useState("");
 const [email, setEmail] = useState("");
 const [no_telp, setNoTelp] = useState("");
-const [layanan, setLayanan] = useState("");
-const [desId, setDesId] = useState();
-const [Destinasi, setDestinasi] = useState([]);
+const [totalHarga, setTotalHarga] = useState();
+const [mobId, setMobId] = useState();
+const [Mobil, setMobil] = useState([]);
 const navigate = useNavigate();
 
 const saveUser = async (e) => {
     e.preventDefault();
     try {
         await axios.post("http://localhost:5000/users", {
-          nama: nama,
-          tgl_lahir: tgl_lahir,
-          tgl_booking: tgl_booking,
-          tgl_berangkat: tgl_berangkat,
-          jml_penumpang: jml_penumpang,
+          nama_penyewa: nama_penyewa,
+          alamat: alamat,
+          tgl_sewa: tgl_sewa,
+          durasi: durasi,
+          lokasi_ambil: lokasi_ambil,
+          lokasi_kembali: lokasi_kembali,
           email: email,
           no_telp: no_telp,
-          layanan: layanan,
-          desId: desId
+          totalHarga: totalHarga,
+          mobId: mobId
       });
       navigate("/UserList");
     } catch (error) {
@@ -40,110 +42,138 @@ const saveUser = async (e) => {
   }
 
   useEffect(() => {
-    getDestinasi();
+    getMobil();
   }, []);
 
-  const getDestinasi = async () => {
-    const response = await axios.get("http://localhost:5000/destinasi");
-    setDestinasi(response.data);
+  const getMobil = async () => {
+    const response = await axios.get("http://localhost:5000/mobil");
+    setMobil(response.data);
   };
 
+  // Calculate totalHarga when mobId or durasi changes
+  useEffect(() => {
+    if (mobId && durasi) {
+      const selectedMobil = Mobil.find((mobil) => mobil.id === parseInt(mobId, 10));
+      const hargaPerHari = selectedMobil ? selectedMobil.harga : 0;
+      const calculatedTotalHarga = hargaPerHari * durasi;
+      console.log("Selected Mobil:", selectedMobil);
+      console.log("Harga Per Hari:", hargaPerHari);
+      console.log("Durasi:", durasi);
+      console.log("Calculated Total Harga:", calculatedTotalHarga);
+      setTotalHarga(calculatedTotalHarga);
+    }
+  }, [mobId, durasi, Mobil]);
+
   return (
-    <div className="columns mt-5 is-centered">
-      <div className="column is-half">
-        <h1 className='title'>Silahkan Masukkan Data Diri Anda</h1>
+    <div className="container">
+    <div className="row mt-5">
+      <div className="col-md-6">
+        <h1 className='title'>Silahkan Masukkan Pesanan Anda</h1>
         <form onSubmit={saveUser}>
-          <div className="field">
+          <div className="mb-3">
             <label className="label">Nama Lengkap</label>
             <div className="control">
               <input
                 type="text"
-                className="input"
+                className="form-control"
                 name='nama'
-                value={nama}
-                onChange={(e) => setNama(e.target.value)}
+                value={nama_penyewa}
+                onChange={(e) => setNamaPenyewa(e.target.value)}
                 placeholder="Nama Lengkap"
               />
             </div>
           </div>
-          <div className="field">
-            <label className="label">Tanggal Lahir</label>
+          <div className="mb-3">
+            <label className="label">Alamat</label>
+            <div className="control">
+              <input
+                type='text'
+                className="form-control"
+                name='alamat'
+                value={alamat}
+                onChange={(e) => setAlamat(e.target.value)}
+                placeholder="JL. xxx"
+              />
+            </div>
+          </div>
+          <div className="mb-3">
+            <label className="label">Tanggal Sewa</label>
             <div className="control">
               <input
                 type="date"
-                className="input"
-                name='tanggal-lahir'
-                value={tgl_lahir}
-                onChange={(e) => setTglLahir(e.target.value)}
+                className="form-control"
+                name='tanggal-sewa'
+                value={tgl_sewa}
+                onChange={(e) => setTglSewa(e.target.value)}
                 placeholder="dd-mm-yyyy"
               />
             </div>
           </div>
-          <div className="field">
-            <label className="label">Tanggal Booking</label>
-            <div className="control">
-              <input
-                type="date"
-                className="input"
-                name='tanggal-booking'
-                value={tgl_booking}
-                onChange={(e) => setTglBooking(e.target.value)}
-                placeholder="dd-mm-yyyy"
-              />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Destinasi</label>
+          <div className="mb-3">
             <div className="control">
               <div className="select is-fullwidth">
-                <select
-                  name='destinasi'
-                  value={desId}
-                  onChange={(e) => setDesId(e.target.value)}
-                  >
-                  <option value="">--Silahkan Pilih Destinasi--</option>
-                  {Destinasi.map((destinasi) => (
-                    <React.Fragment key={destinasi.id}> 
-                    <option value={destinasi.id}>{destinasi.tujuan} dengan Harga : {destinasi.harga}</option>
-                    </React.Fragment>
-                ))}
-                </select>
+                <label className="form-label">List Mobil</label>
+                  <select className="form-control"
+                    name='mobil'
+                    value={mobId}
+                    onChange={(e) => setMobId(e.target.value)}
+                    >
+                    <option>--Silahkan Pilih Mobil--</option>
+                    {Mobil.map((mobil) => (
+                      <React.Fragment key={mobil.id}>
+                      <option value={mobil.id}>{mobil.nama} Harga : Rp.{mobil.harga}</option>
+                      </React.Fragment>
+                      ))}
+                  </select>
               </div>
             </div>
           </div>
-
-          <div className="field">
-            <label className="label">Tanggal Berangkat</label>
+          <div className="mb-3">
+            <label className="label">Durasi</label>
             <div className="control">
               <input
-                type="date"
-                className="input"
-                name='tanggal-berangkat'
-                value={tgl_berangkat}
-                onChange={(e) => setTglBerangkat(e.target.value)}
-                placeholder="dd-mm-yyyy"
+                type="number"
+                className="form-control w-25"
+                name='durasi'
+                value={durasi}
+                onChange={(e) => setDurasi(e.target.value)}
+                placeholder="1 hari"
+                min={1}
               />
             </div>
           </div>
-          <div className="field">
-            <label className="label">Jumlah Penumpang</label>
+          <div className="mb-3">
+            <label className="label">Lokasi Pengambilan</label>
             <div className="control">
               <input
                 type="text"
-                className="input"
-                name='jumlah-penumpang'
-                value={jml_penumpang}
-                onChange={(e) => setJmlPenumpang(e.target.value)}
-                placeholder="Jumlah Penumpang"
+                className="form-control"
+                name='lokasi-pengambilan'
+                value={lokasi_ambil}
+                onChange={(e) => setLokasiAmbil(e.target.value)}
+                placeholder="Tempat Ambil"
               />
             </div>
           </div>
-          <div className="field">
+          <div className="mb-3">
+            <label className="label">Lokasi Pengembalian</label>
+            <div className="control">
+              <input
+                type="text"
+                className="form-control"
+                name='lokasi-pengembalian'
+                value={lokasi_kembali}
+                onChange={(e) => setLokasiKembali(e.target.value)}
+                placeholder="Tempat Kembali"
+              />
+            </div>
+          </div>
+          <div className="mb-3">
             <label className="label">Email</label>
             <div className="control">
               <input
                 type="email"
-                className="input"
+                className="form-control"
                 name='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -151,12 +181,12 @@ const saveUser = async (e) => {
               />
             </div>
           </div>
-          <div className="field">
+          <div className="mb-3">
             <label className="label">No Telfon</label>
             <div className="control">
               <input
                 type="text"
-                className="input"
+                className="form-control"
                 name='no-telp'
                 value={no_telp}
                 onChange={(e) => setNoTelp(e.target.value)}
@@ -164,32 +194,36 @@ const saveUser = async (e) => {
               />
             </div>
           </div>
-          <div className="field">
-            <label className="label">Layanan</label>
+
+        <div className="mb-3">
+          <label className="label">Total Harga</label>
             <div className="control">
-              <div className="select is-fullwidth">
-              <select
-                name='layanan'
-                value={layanan}
-                onChange={(e) => setLayanan(e.target.value)}
-              >
-                <option value="">--Pilih Layanan--</option>
-                <option value="First Class">First Class</option>
-                <option value="Bisnis">Bisnis</option>
-                <option value="Ekonomi">Ekonomi</option>
-              </select>
+              <input
+                type="text"
+                className="form-control"
+                name="totalHarga"
+                value={totalHarga}
+                readOnly
+              />
+        </div>
+      </div>
+
+          <div className="mb-3">
+            <div className="row">
+              <div className="col-sm-4"></div>
+                <div className="col-sm-4">
+                  <button type="submit" onClick={notif} className="btn btn-success w-100">
+                    Bayar
+                  </button>
+                <div className="col-sm-4"></div>
               </div>
             </div>
           </div>
-
-          <div className="field">
-            <button onClick={notif} type="submit" className="button is-success is-fullwidth">
-              Daftar
-            </button>
-          </div>
         </form>
       </div>
+      <div className="col-md-6"></div>
     </div>
+  </div>
   );
 };
 

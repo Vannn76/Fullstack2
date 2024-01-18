@@ -7,10 +7,12 @@ const User = db.define('user',{
     nama_penyewa: DataTypes.STRING,
     alamat: DataTypes.STRING,
     tgl_sewa: DataTypes.STRING,
-    durasi: DataTypes.STRING,
-    no_telp: DataTypes.INTEGER,
+    durasi: DataTypes.INTEGER,
     lokasi_ambil: DataTypes.STRING,
     lokasi_kembali: DataTypes.STRING,
+    email: DataTypes.STRING,
+    no_telp: DataTypes.STRING,
+    totalHarga: DataTypes.INTEGER,
     mobId: DataTypes.INTEGER,
 },{
     freezeTableName:true
